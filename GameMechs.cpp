@@ -1,8 +1,11 @@
 #include "GameMechs.h"
 
+
+// Method completed by Ratish - Used for debugging Player class
 GameMechs::GameMechs()
 {
-    
+    boardSizeX = 30;
+    boardSizeY = 15;
 }
 
 GameMechs::GameMechs(int boardX, int boardY)
@@ -29,7 +32,7 @@ bool GameMechs::getLoseFlagStatus() const
 
 char GameMechs::getInput() const
 {
-
+    
 }
 
 int GameMechs::getScore() const

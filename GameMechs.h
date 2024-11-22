@@ -3,6 +3,7 @@
 
 #include <cstdlib>
 #include <time.h>
+#include <conio.h>
 
 #include "objPos.h"
 #include "objPosArrayList.h"

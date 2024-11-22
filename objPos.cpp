@@ -63,3 +63,15 @@ char objPos::getSymbolIfPosEqual(const objPos* refPos) const
     else
         return 0;
 }
+
+// Defined By Ratish - Getter method for respective co-ordinates
+
+int objPos::getX()
+{
+    return pos->x;
+}
+
+int objPos::getY()
+{
+    return pos->y;
+}
