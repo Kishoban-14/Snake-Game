@@ -1,7 +1,6 @@
 #include "Player.h"
 
-
-Player::Player(GameMechs* thisGMRef)
+Player::Player(GameMechs *thisGMRef)
 {
     mainGameMechsRef = thisGMRef;
     myDir = STOP;
@@ -9,7 +8,6 @@ Player::Player(GameMechs* thisGMRef)
     // more actions to be included
     playerPos = {mainGameMechsRef->getBoardSizeX() / 2, mainGameMechsRef->getBoardSizeY() / 2, '*'};
 }
-
 
 Player::~Player()
 {
@@ -22,14 +20,19 @@ objPos Player::getPlayerPos() const
     return playerPos;
 }
 
-int Player::getX() 
+int Player::getX()
 {
     return playerPos.getX();
 }
 
-int Player::getY() 
+int Player::getY()
 {
     return playerPos.getY();
+}
+
+char Player::getSymbol()
+{
+    return playerPos.getSymbol();
 }
 
 void Player::updatePlayerDir()
@@ -39,104 +42,103 @@ void Player::updatePlayerDir()
 
     switch (myDir)
     {
-        case STOP:
-            if (input = 'w')
-            {
-                myDir = UP;
-            }
-            else if (input = 'a')
-            {
-                myDir = LEFT;
-            }
-            else if (input = 's')
-            {
-                myDir = DOWN;
-            }
-            else if (input = 'd')
-            {
-                myDir = RIGHT;
-            }
+    case STOP:
+        if (input == 'w')
+        {
+            myDir = UP;
+        }
+        else if (input == 'a')
+        {
+            myDir = LEFT;
+        }
+        else if (input == 's')
+        {
+            myDir = DOWN;
+        }
+        else if (input == 'd')
+        {
+            myDir = RIGHT;
+        }
+        break;
 
-        case UP:
-            if (input == 'w')
-            {
-                myDir = UP;
-            }
-            else if (input == 'a')
-            {
-                myDir = LEFT;
-            } 
-            else if (input == 's')
-            {
-                myDir = UP;
-            }
-            else if (input == 'd')
-            {
-                myDir = RIGHT;
-            }
+    case UP:
+        if (input == 'w')
+        {
+            myDir = UP;
+        }
+        else if (input == 'a')
+        {
+            myDir = LEFT;
+        }
+        else if (input == 's')
+        {
+            myDir = UP;
+        }
+        else if (input == 'd')
+        {
+            myDir = RIGHT;
+        }
+        break;
 
-            break;
+    case DOWN:
+        if (input == 'w')
+        {
+            myDir = DOWN;
+        }
+        else if (input == 'a')
+        {
+            myDir = LEFT;
+        }
+        else if (input == 's')
+        {
+            myDir = DOWN;
+        }
+        else if (input == 'd')
+        {
+            myDir = RIGHT;
+        }
+        break;
 
-        case DOWN:
-            if (input == 'w')
-            {
-                myDir = DOWN;
-            }
-            else if (input == 'a')
-            {
-                myDir = LEFT;
-            } else if (input == 's')
-            {
-                myDir = DOWN;
-            }
-            else if (input == 'd')
-            {
-                myDir = RIGHT;
-            }
-            break;
+    case LEFT:
+        if (input == 'w')
+        {
+            myDir = UP;
+        }
+        else if (input == 'a')
+        {
+            myDir = LEFT;
+        }
+        else if (input == 's')
+        {
+            myDir = DOWN;
+        }
+        else if (input == 'd')
+        {
+            myDir = LEFT;
+        }
+        break;
 
-        case LEFT:
-            if (input == 'w')
-            {
-                myDir = UP;
-            }
-            else if (input == 'a')
-            {
-                myDir = LEFT;
-            } 
-            else if (input == 's')
-            {
-                myDir = DOWN;
-            }
-            else if (input == 'd')
-            {
-                myDir = LEFT;
-            }
-            break;
+    case RIGHT:
+        if (input == 'w')
+        {
+            myDir = UP;
+        }
+        else if (input == 'a')
+        {
+            myDir = RIGHT;
+        }
+        else if (input == 's')
+        {
+            myDir = DOWN;
+        }
+        else if (input == 'd')
+        {
+            myDir = RIGHT;
+        }
+        break;
 
-        case RIGHT:
-            if (input == 'w')
-            {
-                myDir = UP;
-            }
-            else if (input == 'a')
-            {
-
-                myDir = RIGHT;
-            } 
-            else if (input == 's')
-            {
-                myDir = DOWN;
-            }
-            else if (input == 'd')
-            {
-
-                myDir = RIGHT;
-            }
-            break;
-
-        default:
-            break;
+    default:
+        break;
     }
 }
 
@@ -149,24 +151,46 @@ void Player::movePlayer()
     switch (myDir)
     {
     case UP:
-        playerPos.setObjPos(playerPos.getX(), playerPos.getY() - 1, playerPos.getSymbol());        
+        xPos -= 1;
         break;
 
     case RIGHT:
-        playerPos.setObjPos(playerPos.getX() + 1, playerPos.getY(), playerPos.getSymbol());
+        yPos += 1;
         break;
 
     case DOWN:
-        playerPos.setObjPos(playerPos.getX(), playerPos.getY() + 1, playerPos.getSymbol());
+        xPos += 1;
         break;
 
     case LEFT:
-        playerPos.setObjPos(playerPos.getX() - 1, playerPos.getY(), playerPos.getSymbol());
+        yPos -= 1;
         break;
-    
+
     default:
         break;
     }
+
+    // Border wraparound
+    if (xPos <= 0)
+    {
+        xPos = mainGameMechsRef->getBoardSizeX() - 2;
+    }
+    else if (xPos > mainGameMechsRef->getBoardSizeX() - 2)
+    {
+        xPos = 1;
+    }
+
+    if (yPos <= 0)
+    {
+        yPos = mainGameMechsRef->getBoardSizeY() - 2;
+    }
+    else if (yPos > mainGameMechsRef->getBoardSizeY() - 2)
+    {
+        yPos = 1;
+    }
+
+    playerPos.setObjPos(xPos, yPos, playerPos.getSymbol());
+
 }
 
 // More methods to be added

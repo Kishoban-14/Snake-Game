@@ -1,11 +1,15 @@
 #include "objPos.h"
+#include <stdlib.h>
+#include <iostream>
+
+using namespace std;
 
 objPos::objPos()
 {
     pos = new Pos;
     pos->x = 0;
     pos->y = 0;
-    symbol = 0; //NULL
+    symbol = 0;
 }
 
 objPos::objPos(int xPos, int yPos, char sym)
@@ -19,8 +23,31 @@ objPos::objPos(int xPos, int yPos, char sym)
 // Respect the rule of six / minimum four
 // [TODO] Implement the missing special member functions to meet the minimum four rule
 
+objPos::~objPos()
+{
+    delete pos;
+}
 
+// Defined By Ratish - Getter method for respective co-ordinates
+objPos::objPos(const objPos &o)
+{
+    pos = new Pos;
+    pos->x = o.pos->x;
+    pos->y = o.pos->y;
+    symbol = o.symbol;
+}
 
+objPos& objPos::operator = (const objPos &o)
+{
+    if (this == &o)
+        return *this;
+
+    pos->x = o.pos->x;
+    pos->y = o.pos->y;
+    symbol = o.symbol;
+
+    return *this;
+}
 
 void objPos::setObjPos(objPos o)
 {

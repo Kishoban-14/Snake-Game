@@ -1,22 +1,22 @@
-CC=g++
-CFLAGS=-I. -lm -g
-DEPS = *.h
-OBJ = objPos.o objPosArrayList.o testCases.o
+CC = g++
+CFLAGS = -I. -lm -g
+DEPS = $(wildcard *.h)
+OBJ = objPos.o objPosArrayList.o Player.o Project.o GameMechs.o
 
+# Rule for compiling .cpp files into .o files
 %.o: %.cpp $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
+# Rule for building the final executable
 ALTester: $(OBJ)
 	$(CC) -o $@ $^ $(CFLAGS)
 
-#testCompile: Test.cpp Matrix.cpp
-#	g++ -o Test.cpp Matrix.cpp
-test:	testALTester
-testLab4:
-# next line must start with a real TAB (ASCII 9)
-	./run.sh
+# Placeholder for testing executable (customize as needed)
+test: ALTester
+	./ALTester
 
 .PHONY: clean
 
+# Rule for cleaning up generated files
 clean:
-	$(RM) *.o *.exe ALTester
+	del /Q *.o ALTester.exe

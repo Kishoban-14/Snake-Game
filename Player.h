@@ -10,7 +10,7 @@ class Player
     // Construct the remaining declaration from the project manual.
 
     // Only some sample members are included here
-    
+
     // You will include more data members and member functions to complete your design.
 
     
@@ -27,6 +27,7 @@ class Player
         // More methods to be added here
         int getX();
         int getY();
+        char getSymbol();
 
     private:
         objPos playerPos; // Upgrade this in iteration 3.       
