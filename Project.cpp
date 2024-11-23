@@ -36,7 +36,7 @@ int main(void)
 
     Initialize();
 
-    while(exitFlag == false)  
+    while(!gameMech->getExitFlagStatus())  //Kishoban-Updated program loop to access exit flag in gameMech object rather than global exit flag
     {
         GetInput();
         RunLogic();
@@ -63,6 +63,7 @@ void Initialize(void)
     HEIGHT = gameMech->getBoardSizeX();
     WIDTH = gameMech->getBoardSizeY();
 
+
     exitFlag = false;
 }
 
@@ -70,6 +71,7 @@ void GetInput(void)
 {
     if (MacUILib_hasChar())
         input = MacUILib_getChar();
+        gameMech -> setInput(input); //Kishoban-processing input character through gameMech object
 }
 
 void RunLogic(void)
@@ -129,6 +131,8 @@ void CleanUp(void)
 
     delete playerPtr;
     delete gameMech;
+    playerPtr = nullptr;
+    gameMech = nullptr;
 
     MacUILib_uninit();
 }
