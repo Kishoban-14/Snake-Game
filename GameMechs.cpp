@@ -1,5 +1,5 @@
 #include "GameMechs.h"
-
+#include <ctime>
 // ###########################################################################################
 //      Object Completed by Ratish - Used for debugging Player class
 // ###########################################################################################
@@ -84,3 +84,22 @@ void GameMechs::clearInput()
 }
 
 // More methods should be added here
+//Kishoban-random food generator(possible flawed implementation)
+void GameMechs::generateFood(objPos blockOff)
+{
+    int randX = rand() % boardSizeX;
+    int randY = rand() % boardSizeY;
+    while (randX == blockOff.pos->x && randY == blockOff.pos->y)
+    {
+        randX = rand() % boardSizeX;
+        randY = rand() % boardSizeY;
+    }
+    foodPos.pos->x = randX;
+    foodPos.pos->y = randY;
+    foodPos.symbol = '*';
+}
+
+ objPos GameMechs::getFoodPos() const
+{
+    return foodPos;
+}

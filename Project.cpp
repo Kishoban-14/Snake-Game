@@ -3,6 +3,8 @@
 #include "objPos.h"
 #include "Player.h"
 #include <conio.h>
+#include <stdlib.h>
+#include <ctime>
 
 using namespace std;
 
@@ -52,11 +54,11 @@ void Initialize(void)
 {
     MacUILib_init();
     MacUILib_clearScreen();
+    srand(time(NULL));
 
     // Allocating Heap Memory
     gameMech = new GameMechs(); // Game Mechanics Object
     playerPtr = new Player(gameMech);   // Player Object
-
     // Initialising Global Variables
     HEIGHT = gameMech->getBoardSizeX(); // Get Board Height
     WIDTH = gameMech->getBoardSizeY();   // Get Board Width
@@ -93,6 +95,10 @@ void DrawScreen(void)
 
     printf("SPEED SETTINGS:\nVery Slow: Press [1]%10sSlow: Press [2]%10sMedium: Press [3]%10sFast: Press [4]%10sVery Fast: Press [5]\n", " ", " ", " ", " ");
 
+    objPos food = gameMech->getFoodPos();
+    int foodX = food.pos->x;
+    int foodY = food.pos->y;
+    char foodSymbol = food.symbol;
     for (i = 0; i < HEIGHT; i++)
     {
         for (j = 0; j < WIDTH; j++)
@@ -104,6 +110,10 @@ void DrawScreen(void)
             else if (i == x && j == y)
             {
                 printf("%c", playerPtr->getSymbol());
+            }
+            else if (i == foodX && j == foodY)  //Kishoban-Prints food symbol
+            {
+                printf("%c", foodSymbol);
             }
             else
             {
