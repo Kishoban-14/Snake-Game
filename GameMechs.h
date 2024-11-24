@@ -4,7 +4,7 @@
 #include <cstdlib>
 #include <time.h>
 #include <conio.h>
-
+#include <Food.h>
 #include "objPos.h"
 #include "objPosArrayList.h"
 
@@ -21,7 +21,7 @@ class GameMechs
         int boardSizeX;
         int boardSizeY;
 
-        objPos foodPos;
+        Food* food;
 
     public:
         GameMechs();
@@ -46,6 +46,7 @@ class GameMechs
         // More methods should be added here
         void generateFood(objPos blockOff);
         objPos getFoodPos() const;
+        void resetFood();
 };
 
 #endif

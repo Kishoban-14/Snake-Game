@@ -1,5 +1,7 @@
 #include "GameMechs.h"
 #include <ctime>
+#include "Food.h"
+#include <iostream>
 // ###########################################################################################
 //      Object Completed by Ratish - Used for debugging Player class
 // ###########################################################################################
@@ -9,20 +11,21 @@
 GameMechs::GameMechs()
     : boardSizeX(15), boardSizeY(30), input(0), score(0), exitFlag(false), loseFlag(false)
 {
-
+    food = new Food();
 }
 
 // Method completed by Ratish - Used for debugging Player class
 GameMechs::GameMechs(int boardX, int boardY)
     : boardSizeX(boardX), boardSizeY(boardY), input(0), score(0), exitFlag(false), loseFlag(false)
 {
-
+    food = new Food();
 }
 
 // do you need a destructor? 
 GameMechs::~GameMechs()
 {
-    // NO, because there are no heap memory allocations in this class
+    delete food;
+     // NO, because there are no heap memory allocations in this class
 }
 
 bool GameMechs::getExitFlagStatus() const
@@ -84,22 +87,21 @@ void GameMechs::clearInput()
 }
 
 // More methods should be added here
-//Kishoban-random food generator(possible flawed implementation)
+
 void GameMechs::generateFood(objPos blockOff)
 {
-    int randX = rand() % boardSizeX;
-    int randY = rand() % boardSizeY;
-    while (randX == blockOff.pos->x && randY == blockOff.pos->y)
+    if(!food->isfoodGenerated())
     {
-        randX = rand() % boardSizeX;
-        randY = rand() % boardSizeY;
+        food->generateFood(blockOff, boardSizeX, boardSizeY);
     }
-    foodPos.pos->x = randX;
-    foodPos.pos->y = randY;
-    foodPos.symbol = '*';
 }
 
  objPos GameMechs::getFoodPos() const
 {
-    return foodPos;
+    return food->getFoodPos();
 }
+void GameMechs::resetFood()
+{
+    food->resetFood();
+}
+ 
