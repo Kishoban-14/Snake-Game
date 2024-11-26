@@ -1,5 +1,7 @@
 #include "GameMechs.h"
-
+#include <ctime>
+#include "Food.h"
+#include <iostream>
 // ###########################################################################################
 //      Object Completed by Ratish - Used for debugging Player class
 // ###########################################################################################

@@ -3,6 +3,8 @@
 #include "objPos.h"
 #include "Player.h"
 #include <conio.h>
+#include <stdlib.h>
+#include <ctime>
 
 using namespace std;
 
@@ -12,7 +14,7 @@ using namespace std;
 // Global Objects
 Player *playerPtr = nullptr;
 GameMechs *gameMech = nullptr;
-
+Food *foodPtr = nullptr;
 // Global Variables
 int x;
 int y;
@@ -60,7 +62,7 @@ void Initialize(void)
     // Allocating Heap Memory
     gameMech = new GameMechs(); // Game Mechanics Object
     playerPtr = new Player(gameMech);   // Player Object
-
+    foodPtr = new Food(); //Kishoban- Food Object
     // Initialising Global Variables
     HEIGHT = gameMech->getBoardSizeX(); // Get Board Height
     WIDTH = gameMech->getBoardSizeY();   // Get Board Width
@@ -73,6 +75,7 @@ void GetInput(void)
 {
     if (MacUILib_hasChar())
         gameMech->setInput(_getch()); // Get Input
+        //Check for debug key 'r' that regenerates food
     else
         gameMech->clearInput(); // Clear input if no input is given
 }
@@ -106,6 +109,10 @@ void DrawScreen(void)
     // printf("SPEED SETTINGS:\nVery Slow: Press [1]%10sSlow: Press [2]%10sMedium: Press [3]%10sFast: Press [4]%10sVery Fast: Press [5]\n", " ", " ", " ", " ");
     wprintf(L"|    SNAKE GAME   |\n");
 
+    objPos food = foodPtr->getFoodPos();
+    int foodX = food.pos->x;
+    int foodY = food.pos->y;
+    char foodSymbol = food.symbol;
     for (i = 0; i < HEIGHT; i++)
     {
         for (j = 0; j < WIDTH; j++)
@@ -161,6 +168,6 @@ void CleanUp(void)
     // De-allocate Heap Memory
     delete playerPtr;
     delete gameMech;
-
+    delete foodPtr;
     MacUILib_uninit();
 }
