@@ -5,136 +5,66 @@ Player::Player(GameMechs *thisGMRef)
     mainGameMechsRef = thisGMRef;
     myDir = STOP;
 
-    // more actions to be included
-    playerPos = {mainGameMechsRef->getBoardSizeX() / 2, mainGameMechsRef->getBoardSizeY() / 2, '*'};
+    // Initialize playerPos
+    playerPos = new objPosArrayList(3);
+
+    // Initialize player position to mimic snake body
+    int initialX = mainGameMechsRef->getBoardSizeX() / 2;
+    int initialY = mainGameMechsRef->getBoardSizeY() / 2;
+
+    for (int i = 0; i < playerPos->getSize(); i++) // Initialize with one element
+    {
+        objPos initialPos(initialX, initialY + i, '*');
+        playerPos->getElement(i).setObjPos(initialPos);
+    }
 }
 
 Player::~Player()
 {
-    // delete any heap members here
+    // Clean up playerPos
+    delete playerPos;
 }
 
-objPos Player::getPlayerPos() const
+objPosArrayList* Player::getPlayerPos() const
 {
-    // return the reference to the playerPos arrray list
     return playerPos;
 }
 
-int Player::getX()
+bool Player::checkFoodConsumption()
 {
-    return playerPos.getX();
+    objPos head = playerPos->getHeadElement();
+    objPos food = mainGameMechsRef->getFoodPos();
+
+    return food.getX() == head.getX() && food.getY() == head.getY();
 }
 
-int Player::getY()
-{
-    return playerPos.getY();
-}
 
-char Player::getSymbol()
-{
-    return playerPos.getSymbol();
-}
 
 void Player::updatePlayerDir()
 {
     // PPA3 input processing logic
     char input = mainGameMechsRef->getInput();
 
-    switch (myDir)
+    switch (input)
     {
-    case STOP:
-        if (input == 'w')
-        {
+    case 'w':
+        if (myDir != DOWN)
             myDir = UP;
-        }
-        else if (input == 'a')
-        {
-            myDir = LEFT;
-        }
-        else if (input == 's')
-        {
-            myDir = DOWN;
-        }
-        else if (input == 'd')
-        {
-            myDir = RIGHT;
-        }
         break;
 
-    case UP:
-        if (input == 'w')
-        {
-            myDir = UP;
-        }
-        else if (input == 'a')
-        {
+    case 'a':
+        if (myDir != RIGHT)
             myDir = LEFT;
-        }
-        else if (input == 's')
-        {
-            myDir = UP;
-        }
-        else if (input == 'd')
-        {
-            myDir = RIGHT;
-        }
         break;
 
-    case DOWN:
-        if (input == 'w')
-        {
+    case 's':
+        if (myDir != UP)
             myDir = DOWN;
-        }
-        else if (input == 'a')
-        {
-            myDir = LEFT;
-        }
-        else if (input == 's')
-        {
-            myDir = DOWN;
-        }
-        else if (input == 'd')
-        {
-            myDir = RIGHT;
-        }
         break;
 
-    case LEFT:
-        if (input == 'w')
-        {
-            myDir = UP;
-        }
-        else if (input == 'a')
-        {
-            myDir = LEFT;
-        }
-        else if (input == 's')
-        {
-            myDir = DOWN;
-        }
-        else if (input == 'd')
-        {
-            myDir = LEFT;
-        }
-        break;
-
-    case RIGHT:
-        if (input == 'w')
-        {
-            myDir = UP;
-        }
-        else if (input == 'a')
-        {
+    case 'd':
+        if (myDir != LEFT)
             myDir = RIGHT;
-        }
-        else if (input == 's')
-        {
-            myDir = DOWN;
-        }
-        else if (input == 'd')
-        {
-            myDir = RIGHT;
-        }
         break;
 
     default:
@@ -145,8 +75,8 @@ void Player::updatePlayerDir()
 void Player::movePlayer()
 {
     // PPA3 Finite State Machine logic
-    int xPos = playerPos.getX();
-    int yPos = playerPos.getY();
+    int xPos = playerPos->getHeadElement().getX();
+    int yPos = playerPos->getHeadElement().getY();
 
     switch (myDir)
     {
@@ -171,25 +101,37 @@ void Player::movePlayer()
     }
 
     // Border wraparound
-    if (xPos <= 0)
+    if (xPos < 1)
     {
         xPos = mainGameMechsRef->getBoardSizeX() - 2;
     }
-    else if (xPos > mainGameMechsRef->getBoardSizeX() - 2)
+    else if (xPos >= mainGameMechsRef->getBoardSizeX() - 1)
     {
         xPos = 1;
     }
 
-    if (yPos <= 0)
+    if (yPos < 1)
     {
         yPos = mainGameMechsRef->getBoardSizeY() - 2;
     }
-    else if (yPos > mainGameMechsRef->getBoardSizeY() - 2)
+    else if (yPos >= mainGameMechsRef->getBoardSizeY() - 1)
     {
         yPos = 1;
     }
 
-    playerPos.setObjPos(xPos, yPos, playerPos.getSymbol());
+    objPos newHead;
+    newHead.setObjPos(xPos, yPos, '*');
+
+    playerPos->insertHead(newHead);
+
+    if (checkFoodConsumption())
+    {
+        mainGameMechsRef->generateFood(playerPos);
+        mainGameMechsRef->incrementScore();
+    }
+
+    else
+        playerPos->removeTail();
 
 }
 

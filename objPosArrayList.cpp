@@ -5,7 +5,25 @@
 
 objPosArrayList::objPosArrayList()
 {
-    objPos *aList = new objPos[arrayCapacity];
+
+    listSize = 3;
+    aList = new objPos[arrayCapacity];
+
+    for (int i = 0; i < 3; i++)
+    {
+        aList[i] = objPos();
+    }
+}
+
+objPosArrayList::objPosArrayList(int size)
+{
+    listSize = size;
+    aList = new objPos[arrayCapacity];
+
+    for (int i = 0; i < listSize; i++)
+    {
+        aList[i] = objPos();
+    }
 }
 
 objPosArrayList::~objPosArrayList()
@@ -45,7 +63,7 @@ void objPosArrayList::insertTail(objPos thisPos)
 
 void objPosArrayList::removeHead()
 {
-    for (int i = 0; i < listSize; i++)
+    for (int i = 1; i < listSize; i++)
     {
         aList[i - 1] = aList[i];
     }
