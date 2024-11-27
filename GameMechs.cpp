@@ -86,30 +86,22 @@ void GameMechs::clearInput()
 // More methods should be added here
 void GameMechs::generateFood(objPosArrayList* playerPos)
 {
-
     int xRange = getBoardSizeX();
     int yRange = getBoardSizeY();
-
-    int x = foodPos->getObjPos().getY();
-    int y = foodPos->getObjPos().getY(); 
-
-    // int listSize = numberOfFood;
+    int x, y;
     int playerSize = playerPos->getSize();
 
+    bool valid = false;
+    while (!valid) {
+        x = rand() % (xRange - 2) + 1;
+        y = rand() % (yRange - 2) + 1;
+        valid = true;
 
-
-    for (int i = 0; i < 1; i++)
-    {
-        int valid = 0;
-        //Keep genearating item till valid item Generated
-        while (!valid) {
-            x = rand() % (xRange - 2) + 1;
-            y = rand() % (yRange - 2) + 1;
-            valid = 1;
-
-            for (int j = 0; j < playerSize; j++)
-                if (x == playerPos->getHeadElement().getX() && y == playerPos->getHeadElement().getY()) 
-                    valid = 0;
+        for (int j = 0; j < playerSize; j++) {
+            if (x == playerPos->getElement(j).getX() && y == playerPos->getElement(j).getY()) {
+                valid = false;
+                break;
+            }
         }
     }
 
