@@ -1,14 +1,15 @@
 #include "Player.h"
 
-Player::Player(GameMechs *thisGMRef)
+Player::Player(GameMechs *thisGMRef, const int size)
 {
     mainGameMechsRef = thisGMRef;
     myDir = STOP;
 
-    // Initialize playerPos
-    playerPos = new objPosArrayList(5);
+    mainGameMechsRef->initScore(size);
 
-    // Initialize player position to mimic snake body
+    // Initialize playerPos
+    playerPos = new objPosArrayList(size);
+
     int initialX = 5;
     int initialY = 5;
 

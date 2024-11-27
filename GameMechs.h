@@ -40,6 +40,7 @@ class GameMechs
         int getBoardSizeY() const;
         
         int getScore() const;
+        void initScore(int n);
         void incrementScore();
         
         // More methods should be added here

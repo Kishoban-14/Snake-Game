@@ -10,7 +10,7 @@
 using namespace std;
 
 #define DELAY_CONST 100000
-#define MAX_SCORE 20
+#define INITIAL_SIZE 3
 
 // Global Objects
 Player *playerPtr = nullptr;
@@ -21,6 +21,7 @@ int x;
 int y;
 int symb;
 char input;
+int MAX_SCORE;
 
 // Iterator Variables
 int i;
@@ -64,8 +65,8 @@ void Initialize(void)
     srand(time(NULL));
 
     // Allocating Heap Memory
-    gameMech = new GameMechs(); // Game Mechanics Object
-    playerPtr = new Player(gameMech);   // Player Object
+    gameMech = new GameMechs(10, 20); // Game Mechanics Object
+    playerPtr = new Player(gameMech, INITIAL_SIZE);   // Player Object
 
     // Initialising Global Variables
     HEIGHT = gameMech->getBoardSizeX(); // Get Board Height
@@ -73,6 +74,8 @@ void Initialize(void)
     symb = playerPtr->getPlayerPos()->getHeadElement().getSymbol();  // Get Player Symbol
 
     OBJ_SIZE = playerPtr->getPlayerPos()->getSize(); // Get Player Size
+
+    MAX_SCORE = (HEIGHT-1) * (WIDTH - 1); // Max Score
 
 }
 
