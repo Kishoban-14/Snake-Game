@@ -1,4 +1,5 @@
 #include <iostream>
+#include <windows.h>
 #include "MacUILib.h"
 #include "objPos.h"
 #include "Player.h"
@@ -8,8 +9,8 @@
 
 using namespace std;
 
-#define DELAY_CONST 10000
-#define MAX_SCORE 2
+#define DELAY_CONST 100000
+#define MAX_SCORE 20
 
 // Global Objects
 Player *playerPtr = nullptr;
@@ -39,6 +40,8 @@ void CleanUp(void);
 int main(void)
 {
 
+    SetConsoleOutputCP(CP_UTF8);
+
     Initialize();
 
     while (gameMech->getExitFlagStatus() == false)
@@ -50,6 +53,7 @@ int main(void)
     }
 
     CleanUp();
+    return 0;
 }
 
 void Initialize(void)
@@ -93,9 +97,14 @@ void RunLogic(void)
 
     OBJ_SIZE = playerPtr->getPlayerPos()->getSize(); // Update Player Size
 
-    if (gameMech->getScore() == MAX_SCORE)
+    if (gameMech->getScore() >= MAX_SCORE)
     {
         gameMech->setLoseFlag();
+        gameMech->setExitTrue();
+    }
+
+    if (playerPtr->checkSelfCollision())
+    {
         gameMech->setExitTrue();
     }
 
@@ -108,20 +117,19 @@ void DrawScreen(void)
     MacUILib_clearScreen();
 
     // Comment out if too much lag in printing
-    printf(" __      ____                      __                  ____                                     __ \n/\\ \\    /\\  _`\\                   /\\ \\                /\\  _`\\                                  /\\ \\ \n\\ \\ \\   \\ \\,\\L\\_\\    ___      __  \\ \\ \\/'\\      __    \\ \\ \\L\\_\\     __      ___ ___      __    \\ \\ \\ \n \\ \\ \\   \\/_\\__ \\  /' _ `\\  /'__`\\ \\ \\ , <    /'__`\\   \\ \\ \\L_L   /'__`\\  /' __` __`\\  /'__`\\   \\ \\ \\ \n  \\ \\ \\    /\\ \\L\\ \\/\\ \\/\\ \\/\\ \\L\\.\\_\\ \\ \\\\`\\ /\\  __/    \\ \\ \\/, \\/\\ \\L\\.\\_/\\ \\/\\ \\/\\ \\/\\  __/    \\ \\ \\ \n   \\ \\ \\   \\ `\\____\\ \\_\\ \\_\\ \\__/.\\_\\\\ \\_\\ \\_\\ \\____\\    \\ \\____/\\ \\__/.\\_\\ \\_\\ \\_\\ \\_\\ \\____\\    \\ \\ \\ \n    \\ \\ \\   \\/_____/\\/_/\\/_/\\/__/\\/_/ \\/_/\\/_/\\/____/     \\/___/  \\/__/\\/_/\\/_/\\/_/\\/_/\\/____/     \\ \\ \\ \n     \\ \\_\\                                                                                          \\ \\_\\ \n      \\/_/                                                                                           \\/_/  \n");
-
+    printf(u8"===============================\n\t SNAKE GAME 🐍\n===============================\n\n");
     for (i = 0; i < HEIGHT; i++)
     {
-        printf("\t\t\t\t\t");
+
         for (j = 0; j < WIDTH; j++)
         {
             if (i == 0 || i == HEIGHT - 1 || j == 0 || j == WIDTH - 1)
             {
-                printf("+");
+                printf(u8"■");
             }
             else if (i == food_x && j == food_y)
             {
-                printf("@");
+                printf(u8"֍");
             }
             else
             {
@@ -130,7 +138,10 @@ void DrawScreen(void)
                 {
                     if (i == playerPtr->getPlayerPos()->getElement(k).getX() && j == playerPtr->getPlayerPos()->getElement(k).getY())
                     {
-                        printf("%c", 'X');
+                        if (k == 0)
+                            printf("%c", playerPtr->getPlayerPos()->getHeadElement().getSymbol());
+                        else
+                        printf(u8"▥");
                         break;
                     }
                 }
@@ -159,9 +170,9 @@ void CleanUp(void)
 
     // Display Win/Lose Message
     if (gameMech->getLoseFlagStatus()) 
-        printf("You Lose!\n");
+        printf("                                                                       .-')      ('-.          \n                                                                      ( OO ).  _(  OO)             \n    ,--.   ,--..-'),-----.  ,--. ,--.          ,--.      .-'),-----. (_)---\\_)(,------.       \n     \\  `.'  /( OO'  .-.  ' |  | |  |          |  |.-') ( OO'  .-.  '/    _ |  |  .---'      \n   .-')     / /   |  | |  | |  | | .-')        |  | OO )/   |  | |  |\\  :` `.  |  |             \n  (OO  \\   /  \\_) |  |\\|  | |  |_|( OO )       |  |`-' |\\_) |  |\\|  | '..`''.)(|  '--.        \n   |   /  /\\_   \\ |  | |  | |  | | `-' /      (|  '---.'  \\ |  | |  |.-._)   \\ |  .--'      \n   `-./  /.__)   `'  '-'  '('  '-'(_.-'        |      |    `'  '-'  '\\       / |  `---.        \n     `--'          `-----'   `-----'           `------'      `-----'  `-----'  `------'        \n\n");
     else
-        printf("You Win!\n");
+        printf("\n     ____     __   ,-----.      ___    _         .--.      .--..-./`) ,---.   .--.          _ _  .--.     \n     \\   \\   /  /.'  .-,  '.  .'   |  | |        |  |_     |  |\\ .-.')|    \\  |  |         ( ` ) `-. \\    \n      \\  _. /  '/ ,-.|  \\ _ \\ |   .'  | |        | _( )_   |  |/ `-' \\|  ,  \\ |  |        (_ o _)   \\_\\   \n       _( )_ .';  \\  '_ /  | :.'  '_  | |        |(_ o _)  |  | `-'`\"`|  |\\_ \\|  |         (_,_)   _( )_  \n   ___(_ o _)' |  _`,/ \\ _/  |'   ( \\.-.|        | (_,_) \\ |  | .---. |  _( )_\\  |                (_ o _) \n  |   |(_,_)'  : (  '\\_/ \\   ;' (`. _` /|        |  |/    \\|  | |   | | (_ o _)  |           _     (_,_) \n  |   `-'  /    \\ `\"/  \\  ) / | (_ (_) _)        |  '  /\\  `  | |   | |  (_,_)\\  |         _( )_    / /   \n   \\      /      '. \\_/``\".'   \\ /  . \\ /        |    /  \\    | |   | |  |    |  |        (_ o _).-' /    \n    `-..-'         '-----'      ``-'`-''         `---'    `---` '---' '--'    '--'         (_,_) `--'     \n                                                                                                          \n");
     
     // De-allocate Heap Memory
     delete playerPtr;

@@ -6,11 +6,11 @@ Player::Player(GameMechs *thisGMRef)
     myDir = STOP;
 
     // Initialize playerPos
-    playerPos = new objPosArrayList(3);
+    playerPos = new objPosArrayList(5);
 
     // Initialize player position to mimic snake body
-    int initialX = mainGameMechsRef->getBoardSizeX() / 2;
-    int initialY = mainGameMechsRef->getBoardSizeY() / 2;
+    int initialX = 5;
+    int initialY = 5;
 
     for (int i = 0; i < playerPos->getSize(); i++) // Initialize with one element
     {
@@ -38,7 +38,21 @@ bool Player::checkFoodConsumption()
     return food.getX() == head.getX() && food.getY() == head.getY();
 }
 
+bool Player::checkSelfCollision()
+{
+    if (myDir == STOP)
+        return false;
+    
+    objPos head = playerPos->getHeadElement();
 
+    for (int i = 1; i < playerPos->getSize(); i++)
+    {
+        if (head.getX() == playerPos->getElement(i).getX() && head.getY() == playerPos->getElement(i).getY())
+            return true;
+    }
+
+    return false;
+}
 
 void Player::updatePlayerDir()
 {
@@ -78,22 +92,29 @@ void Player::movePlayer()
     int xPos = playerPos->getHeadElement().getX();
     int yPos = playerPos->getHeadElement().getY();
 
+    // Head Symbol
+    char headSymbol;
+
     switch (myDir)
     {
     case UP:
         xPos -= 1;
+        headSymbol = '^';
         break;
 
     case RIGHT:
         yPos += 1;
+        headSymbol = '>';
         break;
 
     case DOWN:
         xPos += 1;
+        headSymbol = 'v';
         break;
 
     case LEFT:
         yPos -= 1;
+        headSymbol = '<';
         break;
 
     default:
@@ -120,7 +141,7 @@ void Player::movePlayer()
     }
 
     objPos newHead;
-    newHead.setObjPos(xPos, yPos, '*');
+    newHead.setObjPos(xPos, yPos, headSymbol);
 
     playerPos->insertHead(newHead);
 
@@ -132,7 +153,6 @@ void Player::movePlayer()
 
     else
         playerPos->removeTail();
-
 }
 
 // More methods to be added

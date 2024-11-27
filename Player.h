@@ -26,6 +26,8 @@ class Player
 
         // More methods to be added here
         bool checkFoodConsumption();
+        bool checkSelfCollision();
+
 
     private:
         objPosArrayList* playerPos; // Upgrade this in iteration 3.       

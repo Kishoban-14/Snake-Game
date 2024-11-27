@@ -10,10 +10,11 @@ typedef struct
 
 class objPos
 {
-    public:
+    private:
         Pos* pos;  
         char symbol;
 
+    public:
         objPos();
         objPos(int xPos, int yPos, char sym);
         objPos(const objPos &o);
