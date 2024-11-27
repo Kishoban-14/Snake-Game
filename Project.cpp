@@ -8,13 +8,13 @@
 
 using namespace std;
 
-#define DELAY_CONST 200000
+#define DELAY_CONST 10000
 #define MAX_SCORE 2
 
 // Global Objects
 Player *playerPtr = nullptr;
 GameMechs *gameMech = nullptr;
-Food *foodPtr = nullptr;
+
 // Global Variables
 int x;
 int y;
@@ -62,11 +62,12 @@ void Initialize(void)
     // Allocating Heap Memory
     gameMech = new GameMechs(); // Game Mechanics Object
     playerPtr = new Player(gameMech);   // Player Object
-    foodPtr = new Food(); //Kishoban- Food Object
+
     // Initialising Global Variables
     HEIGHT = gameMech->getBoardSizeX(); // Get Board Height
     WIDTH = gameMech->getBoardSizeY();   // Get Board Width
     symb = playerPtr->getPlayerPos()->getHeadElement().getSymbol();  // Get Player Symbol
+
     OBJ_SIZE = playerPtr->getPlayerPos()->getSize(); // Get Player Size
 
 }
@@ -106,15 +107,12 @@ void DrawScreen(void)
     int food_y = gameMech->getFoodPos().getY();
     MacUILib_clearScreen();
 
-    // printf("SPEED SETTINGS:\nVery Slow: Press [1]%10sSlow: Press [2]%10sMedium: Press [3]%10sFast: Press [4]%10sVery Fast: Press [5]\n", " ", " ", " ", " ");
-    wprintf(L"|    SNAKE GAME   |\n");
+    // Comment out if too much lag in printing
+    printf(" __      ____                      __                  ____                                     __ \n/\\ \\    /\\  _`\\                   /\\ \\                /\\  _`\\                                  /\\ \\ \n\\ \\ \\   \\ \\,\\L\\_\\    ___      __  \\ \\ \\/'\\      __    \\ \\ \\L\\_\\     __      ___ ___      __    \\ \\ \\ \n \\ \\ \\   \\/_\\__ \\  /' _ `\\  /'__`\\ \\ \\ , <    /'__`\\   \\ \\ \\L_L   /'__`\\  /' __` __`\\  /'__`\\   \\ \\ \\ \n  \\ \\ \\    /\\ \\L\\ \\/\\ \\/\\ \\/\\ \\L\\.\\_\\ \\ \\\\`\\ /\\  __/    \\ \\ \\/, \\/\\ \\L\\.\\_/\\ \\/\\ \\/\\ \\/\\  __/    \\ \\ \\ \n   \\ \\ \\   \\ `\\____\\ \\_\\ \\_\\ \\__/.\\_\\\\ \\_\\ \\_\\ \\____\\    \\ \\____/\\ \\__/.\\_\\ \\_\\ \\_\\ \\_\\ \\____\\    \\ \\ \\ \n    \\ \\ \\   \\/_____/\\/_/\\/_/\\/__/\\/_/ \\/_/\\/_/\\/____/     \\/___/  \\/__/\\/_/\\/_/\\/_/\\/_/\\/____/     \\ \\ \\ \n     \\ \\_\\                                                                                          \\ \\_\\ \n      \\/_/                                                                                           \\/_/  \n");
 
-    objPos food = foodPtr->getFoodPos();
-    int foodX = food.pos->x;
-    int foodY = food.pos->y;
-    char foodSymbol = food.symbol;
     for (i = 0; i < HEIGHT; i++)
     {
+        printf("\t\t\t\t\t");
         for (j = 0; j < WIDTH; j++)
         {
             if (i == 0 || i == HEIGHT - 1 || j == 0 || j == WIDTH - 1)
@@ -168,6 +166,6 @@ void CleanUp(void)
     // De-allocate Heap Memory
     delete playerPtr;
     delete gameMech;
-    delete foodPtr;
+
     MacUILib_uninit();
 }

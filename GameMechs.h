@@ -4,7 +4,6 @@
 #include <cstdlib>
 #include <time.h>
 #include <conio.h>
-#include <Food.h>
 #include "objPos.h"
 #include "objPosArrayList.h"
 
