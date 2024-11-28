@@ -26,11 +26,6 @@ GameMechs::~GameMechs()
     delete foodPos;
 }
 
-void GameMechs::initScore(int n)
-{
-    score = n;
-}
-
 bool GameMechs::getExitFlagStatus() const
 {
     return exitFlag;

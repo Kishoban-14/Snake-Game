@@ -13,7 +13,6 @@ class objPos
     private:
         Pos* pos;  
         char symbol;
-        int* score;
 
     public:
         objPos();
