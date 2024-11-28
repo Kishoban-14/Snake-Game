@@ -22,6 +22,8 @@ int y;
 int symb;
 char input;
 
+string Missing_Row = "";
+
 // Iterator Variables
 int i;
 int j;
@@ -64,7 +66,7 @@ void Initialize(void)
     srand(time(NULL));
 
     // Allocating Heap Memory
-    gameMech = new GameMechs(); // Game Mechanics Object
+    gameMech = new GameMechs(10, 20); // Game Mechanics Object
     playerPtr = new Player(gameMech);   // Player Object
 
     // Initialising Global Variables
@@ -74,11 +76,14 @@ void Initialize(void)
 
     OBJ_SIZE = playerPtr->getPlayerPos()->getSize(); // Get Player Size
 
+    for (i = 0; i < WIDTH; i++)    
+        (i == 0 || i == WIDTH - 1) ? Missing_Row += "░█░" : Missing_Row += "   ";
+
 }
 
 void GetInput(void)
 {
-    if (MacUILib_hasChar())
+    if (_kbhit())
         gameMech->setInput(_getch()); // Get Input
         //Check for debug key 'r' that regenerates food
     else
@@ -117,7 +122,10 @@ void DrawScreen(void)
     MacUILib_clearScreen();
 
     // Comment out if too much lag in printing
-    printf(u8"===============================\n\t SNAKE GAME 🐍\n===============================\n\n");
+    string buffer = "";
+    
+    // buffer += u8"===============================\n\t SNAKE GAME \n===============================\n\n";
+
     for (i = 0; i < HEIGHT; i++)
     {
 
@@ -125,11 +133,11 @@ void DrawScreen(void)
         {
             if (i == 0 || i == HEIGHT - 1 || j == 0 || j == WIDTH - 1)
             {
-                printf(u8"■");
+                buffer += u8"█░█";
             }
             else if (i == food_x && j == food_y)
             {
-                printf(u8"֍");
+                buffer += u8" 🥚";
             }
             else
             {
@@ -139,23 +147,53 @@ void DrawScreen(void)
                     if (i == playerPtr->getPlayerPos()->getElement(k).getX() && j == playerPtr->getPlayerPos()->getElement(k).getY())
                     {
                         if (k == 0)
-                            printf("%c", playerPtr->getPlayerPos()->getHeadElement().getSymbol());
+                            {
+                            buffer += " ";
+                            buffer += "🐍";
+                            }
                         else
-                        printf(u8"▥");
+                        buffer += u8" 🟩";
                         break;
                     }
                 }
                 if (k == OBJ_SIZE)
                 {
-                    printf(" ");
+                    buffer += "   ";
                 }
             }
         }
-        printf("\n");
+        // printf("\n");
+        (i < HEIGHT - 1) ? buffer += "\n" + Missing_Row + "\n" : buffer += "\n\n";
     }
 
-    printf("Input Character: %c\n", input);
-    printf("Score: %d\n", gameMech->getScore());
+    // buffer += "Input Character: ";
+    // buffer += to_string(input);
+    // buffer += "\nScore: ";
+    // buffer += to_string(gameMech->getScore());
+    // buffer += "\n";
+
+    // // printf("\n");
+    // buffer += "\n";
+
+    // int sizze = playerPtr->getPlayerPos()->getSize();
+
+    // // printf("X - {Head} : %d Y - {Head} : %d\n", playerPtr->getPlayerPos()->getHeadElement().getX(), playerPtr->getPlayerPos()->getHeadElement().getY());
+    // // printf("X - {Tail} : %d Y - {Tail} : %d\n", playerPtr->getPlayerPos()->getElement(sizze).getX(), playerPtr->getPlayerPos()->getElement(sizze).getY());
+
+    // buffer += "X - {Head} : ";
+    // buffer += to_string(playerPtr->getPlayerPos()->getHeadElement().getX());
+    // buffer += " Y - {Head} : ";
+    // buffer += to_string(playerPtr->getPlayerPos()->getHeadElement().getY());
+    // buffer += "\n";
+
+    // buffer += "X - {Tail} : ";
+    // buffer += to_string(playerPtr->getPlayerPos()->getTailElement().getX());
+    // buffer += " Y - {Tail} : ";
+    // buffer += to_string(playerPtr->getPlayerPos()->getTailElement().getY());
+    // buffer += "\n";
+
+    printf("%s", buffer.c_str());
+
 }
 
 void LoopDelay(void)

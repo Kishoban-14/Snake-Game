@@ -11,7 +11,7 @@ typedef struct
 class objPos
 {
     private:
-        Pos* pos;  
+        Pos* pos;
         char symbol;
 
     public:

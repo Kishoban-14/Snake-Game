@@ -22,13 +22,7 @@ objPos::objPos(int xPos, int yPos, char sym)
 
 // Respect the rule of six / minimum four
 // [TODO] Implement the missing special member functions to meet the minimum four rule
-
-objPos::~objPos()
-{
-    delete pos;
-}
-
-// Defined By Ratish - Getter method for respective co-ordinates
+// Defined By Ratish - Copy Cnostructor
 objPos::objPos(const objPos &o)
 {
     pos = new Pos;
@@ -49,6 +43,13 @@ objPos& objPos::operator = (const objPos &o)
     return *this;
 }
 
+// Defined By Ratish - Destructor
+objPos::~objPos()
+{
+    delete pos;
+}
+
+// Object Functions
 void objPos::setObjPos(objPos o)
 {
     pos->x = o.pos->x;

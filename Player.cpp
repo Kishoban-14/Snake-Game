@@ -6,7 +6,7 @@ Player::Player(GameMechs *thisGMRef)
     myDir = STOP;
 
     // Initialize playerPos
-    playerPos = new objPosArrayList(5);
+    playerPos = new objPosArrayList(3);
 
     // Initialize player position to mimic snake body
     int initialX = 5;
@@ -14,7 +14,7 @@ Player::Player(GameMechs *thisGMRef)
 
     for (int i = 0; i < playerPos->getSize(); i++) // Initialize with one element
     {
-        objPos initialPos(initialX, initialY + i, '*');
+        objPos initialPos(initialX, initialY, '*');
         playerPos->getElement(i).setObjPos(initialPos);
     }
 }
