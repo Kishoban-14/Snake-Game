@@ -79,7 +79,7 @@ void Initialize(void)
 
     // Allocating Heap Memory
     gameMech = new GameMechs(10, 20); // Game Mechanics Object
-    playerPtr = new Player(gameMech, 1, 1, INIT_SIZE);   // Player Object
+    playerPtr = new Player(gameMech, 7, 6, INIT_SIZE);   // Player Object
 
     // Initialising Global Variables
     HEIGHT = gameMech->getBoardSizeX();                     // Get Board Height

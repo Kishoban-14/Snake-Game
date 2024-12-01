@@ -15,13 +15,13 @@ Player::Player(GameMechs *thisGMRef, int initialX, int initialY, int initialSize
     myDir = STOP;
 
     // Initialize playerPos
-    playerPos = new objPosArrayList(initialSize);
+    playerPos = new objPosArrayList(initialX, initialY, initialSize);
 
-    for (int i = 0; i < playerPos->getSize(); i++) // Initialize with one element
-    {
-        objPos initialPos(initialX, initialY, 'O');
-        playerPos->getElement(i).setObjPos(initialPos);
-    }
+    // for (int i = 0; i < playerPos->getSize(); i++) // Initialize with one element
+    // {
+    //     objPos initialPos(initialX, initialY, 'O');
+    //     playerPos->getElement(i).setObjPos(initialPos);
+    // }
 }
 
 Player::~Player()

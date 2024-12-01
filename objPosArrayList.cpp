@@ -21,21 +21,27 @@ objPosArrayList::objPosArrayList(int size)
     arrayCapacity = ARRAY_MAX_CAP;
     aList = new objPos[arrayCapacity];
 
+    initialX = 2;
+    initialY = 2;
+
     for (int i = 0; i < listSize; i++)
     {
-        aList[i].setObjPos(1, 1 + i, L'o');
+        aList[i].setObjPos(initialX, initialY + i, L'o');
     }
 }
 
-objPosArrayList::objPosArrayList(int x, int y, int size)
+objPosArrayList::objPosArrayList(const int x, const int y, int size)
 {
     listSize = size;
     arrayCapacity = ARRAY_MAX_CAP;
     aList = new objPos[arrayCapacity];
 
+    initialX = x;
+    initialY = y;
+
     for (int i = 0; i < listSize; i++)
     {
-        aList[i].setObjPos(x, y + i, L'o');
+        aList[i].setObjPos(initialX, initialY + i, L'o');
     }
 }
 

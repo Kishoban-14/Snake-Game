@@ -12,6 +12,9 @@ class objPosArrayList
         int listSize;
         int arrayCapacity;
 
+        int initialX;
+        int initialY;
+
     public:
         objPosArrayList();
         objPosArrayList(int size);
