@@ -1,9 +1,12 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+#include <wchar.h>
+#include <locale.h>
 #include "GameMechs.h"
 #include "objPos.h"
 #include "objPosArrayList.h"
+
 
 class Player
 {
@@ -17,10 +20,13 @@ class Player
     public:
         enum Dir {UP, DOWN, LEFT, RIGHT, STOP};  // This is the direction state
 
-        Player(GameMechs* thisGMRef);
+        Player(GameMechs* thisGMRef, int initialX, int initialY);
+        Player(GameMechs* thisGMRef, int initialX, int initialY, int initialSize);
         ~Player();
 
-        objPosArrayList* getPlayerPos() const; // Upgrade this in iteration 3.       
+        objPosArrayList* getPlayerPos() const; // Upgrade this in iteration 3. 
+        wchar_t getHeadSymbol();
+        int updateSpeed(char mode, int delay);      
         void updatePlayerDir();
         void movePlayer();
 

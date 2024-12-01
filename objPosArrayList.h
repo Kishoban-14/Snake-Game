@@ -15,7 +15,7 @@ class objPosArrayList
     public:
         objPosArrayList();
         objPosArrayList(int size);
-        objPosArrayList(int x, int y, int size);
+        objPosArrayList(const int x, const int y, int size);
 
         ~objPosArrayList();
 

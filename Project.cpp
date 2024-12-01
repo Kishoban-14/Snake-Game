@@ -9,29 +9,38 @@
 
 using namespace std;
 
-#define DELAY_CONST 100000
+
 #define MAX_SCORE 20
+#define INIT_SIZE 5
 
 // Global Objects
 Player *playerPtr = nullptr;
 GameMechs *gameMech = nullptr;
 
 // Global Variables
+int DELAY_CONST = 100000;
+
 int x;
 int y;
-int symb;
+wchar_t symb;
 char input;
-
-string Missing_Row = "";
+string buffer;
 
 // Iterator Variables
 int i;
 int j;
 
+// Constant Variables
 int HEIGHT;
 int WIDTH;
 int OBJ_SIZE;
+string Missing_Row = "";
+const string BORDER_SYMBOL = u8"█░█";
+const string SPACE_CHAR = "   ";
+string HEAD_SYMBOL;
+string BODY_SYMBOL;
 
+// Function Prototypes
 void Initialize(void);
 void GetInput(void);
 void RunLogic(void);
@@ -43,6 +52,9 @@ int main(void)
 {
 
     SetConsoleOutputCP(CP_UTF8);
+
+    // Hide Cursor
+    printf("\e[?25l");
 
     Initialize();
 
@@ -67,17 +79,21 @@ void Initialize(void)
 
     // Allocating Heap Memory
     gameMech = new GameMechs(10, 20); // Game Mechanics Object
-    playerPtr = new Player(gameMech);   // Player Object
+    playerPtr = new Player(gameMech, 1, 1, INIT_SIZE);   // Player Object
 
     // Initialising Global Variables
-    HEIGHT = gameMech->getBoardSizeX(); // Get Board Height
-    WIDTH = gameMech->getBoardSizeY();   // Get Board Width
-    symb = playerPtr->getPlayerPos()->getHeadElement().getSymbol();  // Get Player Symbol
-
+    HEIGHT = gameMech->getBoardSizeX();                     // Get Board Height
+    WIDTH = gameMech->getBoardSizeY();                     // Get Board Width
+    HEAD_SYMBOL = "🐍";             // Get Head Symbol
+    BODY_SYMBOL = " 🟫";      // Set Body Symbol
     OBJ_SIZE = playerPtr->getPlayerPos()->getSize(); // Get Player Size
 
+    buffer += u8"===============================\n\t SNAKE GAME \n===============================\n\n";
+
+    gameMech->generateFood(playerPtr->getPlayerPos()); // Generate Food
+    // Generate Missing Row
     for (i = 0; i < WIDTH; i++)    
-        (i == 0 || i == WIDTH - 1) ? Missing_Row += "░█░" : Missing_Row += "   ";
+        (i == 0 || i == WIDTH - 1) ? Missing_Row += BORDER_SYMBOL : Missing_Row += SPACE_CHAR;
 
 }
 
@@ -85,55 +101,68 @@ void GetInput(void)
 {
     if (_kbhit())
         gameMech->setInput(_getch()); // Get Input
-        //Check for debug key 'r' that regenerates food
     else
         gameMech->clearInput(); // Clear input if no input is given
 }
 
 void RunLogic(void)
 {
+    // Get Input
     input = gameMech->getInput();
 
+    // Check Exit Condition
     if (input == 32)
+    {
         gameMech->setExitTrue();
+        return ;
+    }
 
+    // Update Player Direction
     playerPtr->updatePlayerDir();      // Update player direction
     playerPtr->movePlayer();    // Move player based on direction
-
     OBJ_SIZE = playerPtr->getPlayerPos()->getSize(); // Update Player Size
 
+
+
+    // Check Self Collision
+    if (playerPtr->checkSelfCollision())
+    {
+        gameMech->setExitTrue(); 
+        return ;
+    }
+
+    // Check Win/Lose Status
     if (gameMech->getScore() >= MAX_SCORE)
     {
         gameMech->setLoseFlag();
         gameMech->setExitTrue();
+        return ;
     }
 
-    if (playerPtr->checkSelfCollision())
-    {
-        gameMech->setExitTrue();
-    }
 
 }
 
 void DrawScreen(void)
 {
+    // Check Exit status
+    if (gameMech->getExitFlagStatus())
+        return ;
+
     int food_x = gameMech->getFoodPos().getX();
     int food_y = gameMech->getFoodPos().getY();
     MacUILib_clearScreen();
 
-    // Comment out if too much lag in printing
-    string buffer = "";
-    
-    // buffer += u8"===============================\n\t SNAKE GAME \n===============================\n\n";
+    buffer.clear(); // Clear buffer at the start
+
+    buffer += u8"===============================\n\t SNAKE GAME \n===============================\n\n";
 
     for (i = 0; i < HEIGHT; i++)
     {
-
         for (j = 0; j < WIDTH; j++)
         {
             if (i == 0 || i == HEIGHT - 1 || j == 0 || j == WIDTH - 1)
             {
-                buffer += u8"█░█";
+                buffer += BORDER_SYMBOL;
             }
             else if (i == food_x && j == food_y)
             {
@@ -147,53 +176,28 @@ void DrawScreen(void)
                     if (i == playerPtr->getPlayerPos()->getElement(k).getX() && j == playerPtr->getPlayerPos()->getElement(k).getY())
                     {
                         if (k == 0)
-                            {
+                        {
                             buffer += " ";
-                            buffer += "🐍";
-                            }
+                            // buffer += ;
+                            buffer += HEAD_SYMBOL;
+                        }
                         else
-                        buffer += u8" 🟩";
+                        {
+                            buffer += BODY_SYMBOL;
+                        }
                         break;
                     }
                 }
                 if (k == OBJ_SIZE)
                 {
-                    buffer += "   ";
+                    buffer += SPACE_CHAR;
                 }
             }
         }
-        // printf("\n");
         (i < HEIGHT - 1) ? buffer += "\n" + Missing_Row + "\n" : buffer += "\n\n";
     }
 
-    // buffer += "Input Character: ";
-    // buffer += to_string(input);
-    // buffer += "\nScore: ";
-    // buffer += to_string(gameMech->getScore());
-    // buffer += "\n";
-
-    // // printf("\n");
-    // buffer += "\n";
-
-    // int sizze = playerPtr->getPlayerPos()->getSize();
-
-    // // printf("X - {Head} : %d Y - {Head} : %d\n", playerPtr->getPlayerPos()->getHeadElement().getX(), playerPtr->getPlayerPos()->getHeadElement().getY());
-    // // printf("X - {Tail} : %d Y - {Tail} : %d\n", playerPtr->getPlayerPos()->getElement(sizze).getX(), playerPtr->getPlayerPos()->getElement(sizze).getY());
-
-    // buffer += "X - {Head} : ";
-    // buffer += to_string(playerPtr->getPlayerPos()->getHeadElement().getX());
-    // buffer += " Y - {Head} : ";
-    // buffer += to_string(playerPtr->getPlayerPos()->getHeadElement().getY());
-    // buffer += "\n";
-
-    // buffer += "X - {Tail} : ";
-    // buffer += to_string(playerPtr->getPlayerPos()->getTailElement().getX());
-    // buffer += " Y - {Tail} : ";
-    // buffer += to_string(playerPtr->getPlayerPos()->getTailElement().getY());
-    // buffer += "\n";
-
     printf("%s", buffer.c_str());
-
 }
 
 void LoopDelay(void)
