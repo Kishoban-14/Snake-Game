@@ -11,7 +11,9 @@ using namespace std;
 
 
 #define MAX_SCORE 20
-#define INIT_SIZE 5
+#define INIT_SIZE 1
+#define INIT_X 1
+#define INIT_Y 1
 
 // Global Objects
 Player *playerPtr = nullptr;
@@ -79,18 +81,18 @@ void Initialize(void)
 
     // Allocating Heap Memory
     gameMech = new GameMechs(10, 20); // Game Mechanics Object
-    playerPtr = new Player(gameMech, 7, 6, INIT_SIZE);   // Player Object
+    playerPtr = new Player(gameMech, INIT_X, INIT_Y, INIT_SIZE);   // Player Object
 
     // Initialising Global Variables
-    HEIGHT = gameMech->getBoardSizeX();                     // Get Board Height
-    WIDTH = gameMech->getBoardSizeY();                     // Get Board Width
-    HEAD_SYMBOL = "🐍";             // Get Head Symbol
-    BODY_SYMBOL = " 🟫";      // Set Body Symbol
-    OBJ_SIZE = playerPtr->getPlayerPos()->getSize(); // Get Player Size
+    HEIGHT = gameMech->getBoardSizeX();                             // Get Board Height
+    WIDTH = gameMech->getBoardSizeY();                             // Get Board Width
+    HEAD_SYMBOL = " O";                                           // Get Head Symbol
+    BODY_SYMBOL = "  o";                                         // Set Body Symbol
+    OBJ_SIZE = playerPtr->getPlayerPos()->getSize();            // Get Player Size
 
     buffer += u8"===============================\n\t SNAKE GAME \n===============================\n\n";
 
-    gameMech->generateFood(playerPtr->getPlayerPos()); // Generate Food
+    gameMech->generateFood(playerPtr->getPlayerPos());              // Generate Food
     // Generate Missing Row
     for (i = 0; i < WIDTH; i++)    
         (i == 0 || i == WIDTH - 1) ? Missing_Row += BORDER_SYMBOL : Missing_Row += SPACE_CHAR;
