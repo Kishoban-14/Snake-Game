@@ -1,27 +1,22 @@
 #include "Player.h"
 
-Player::Player(GameMechs *thisGMRef, int initialX, int initialY)
+Player::Player(GameMechs *thisGMRef)
 {
     mainGameMechsRef = thisGMRef;
     myDir = STOP;
 
     // Initialize playerPos
-    playerPos = new objPosArrayList(initialX, initialY, 3);
-}
+    playerPos = new objPosArrayList(3);
 
-Player::Player(GameMechs *thisGMRef, int initialX, int initialY, int initialSize)
-{
-    mainGameMechsRef = thisGMRef;
-    myDir = STOP;
+    // Initialize player position to mimic snake body
+    int initialX = 5;
+    int initialY = 5;
 
-    // Initialize playerPos
-    playerPos = new objPosArrayList(initialX, initialY, initialSize);
-
-    // for (int i = 0; i < playerPos->getSize(); i++) // Initialize with one element
-    // {
-    //     objPos initialPos(initialX, initialY, 'O');
-    //     playerPos->getElement(i).setObjPos(initialPos);
-    // }
+    for (int i = 0; i < playerPos->getSize(); i++) // Initialize with one element
+    {
+        objPos initialPos(initialX, initialY, '*');
+        playerPos->getElement(i).setObjPos(initialPos);
+    }
 }
 
 Player::~Player()
@@ -33,11 +28,6 @@ Player::~Player()
 objPosArrayList* Player::getPlayerPos() const
 {
     return playerPos;
-}
-
-wchar_t Player::getHeadSymbol()
-{
-    return playerPos->getHeadElement().getSymbol();
 }
 
 bool Player::checkFoodConsumption()
@@ -62,22 +52,6 @@ bool Player::checkSelfCollision()
     }
 
     return false;
-}
-
-int Player::updateSpeed(char mode, int delay)
-{
-    switch (mode)
-    {
-    case 's':
-        delay *= 2;
-        break;
-    case 'f':
-        delay /= 2;
-        break;
-    default:
-        break;
-    }
-    return delay;
 }
 
 void Player::updatePlayerDir()
@@ -119,31 +93,28 @@ void Player::movePlayer()
     int yPos = playerPos->getHeadElement().getY();
 
     // Head Symbol
-    wchar_t headSymbol; // Change type to wchar_t
-    headSymbol = 'o';
+    char headSymbol;
 
     switch (myDir)
     {
-    case STOP:
-        return ;
     case UP:
         xPos -= 1;
-        headSymbol = 'O';
+        headSymbol = '^';
         break;
 
     case RIGHT:
         yPos += 1;
-        headSymbol = 'O';
+        headSymbol = '>';
         break;
 
     case DOWN:
         xPos += 1;
-        headSymbol = 'O';
+        headSymbol = 'v';
         break;
 
     case LEFT:
         yPos -= 1;
-        headSymbol = 'O';
+        headSymbol = '<';
         break;
 
     default:
@@ -177,10 +148,11 @@ void Player::movePlayer()
     if (checkFoodConsumption())
     {
         mainGameMechsRef->generateFood(playerPos);
-        mainGameMechsRef->incrementScore(1);
+        mainGameMechsRef->incrementScore();
     }
 
     else
         playerPos->removeTail();
 }
+
 // More methods to be added

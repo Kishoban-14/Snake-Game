@@ -12,11 +12,11 @@ class objPos
 {
     private:
         Pos* pos;
-        wchar_t symbol;
+        char symbol;
 
     public:
         objPos();
-        objPos(int xPos, int yPos, wchar_t sym);
+        objPos(int xPos, int yPos, char sym);
         objPos(const objPos &o);
         objPos& operator = (const objPos &o);
         
@@ -25,13 +25,13 @@ class objPos
         ~objPos();
         
         void setObjPos(objPos o);
-        void setObjPos(int xPos, int yPos, wchar_t sym);
+        void setObjPos(int xPos, int yPos, char sym);
 
         objPos getObjPos() const;
-        wchar_t getSymbol() const;
+        char getSymbol() const;
         int getX(); // Get Row Number/x-value
         int getY(); // Get Column Number/y-value
-        wchar_t getSymbolIfPosEqual(const objPos* refPos) const;
+        char getSymbolIfPosEqual(const objPos* refPos) const;
         
         bool isPosEqual(const objPos* refPos) const;
 };

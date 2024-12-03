@@ -12,7 +12,7 @@ objPos::objPos()
     symbol = 0;
 }
 
-objPos::objPos(int xPos, int yPos, wchar_t sym)
+objPos::objPos(int xPos, int yPos, char sym)
 {
     pos = new Pos;
     pos->x = xPos;
@@ -57,7 +57,7 @@ void objPos::setObjPos(objPos o)
     symbol = o.symbol;
 }
 
-void objPos::setObjPos(int xPos, int yPos, wchar_t sym)
+void objPos::setObjPos(int xPos, int yPos, char sym)
 {
     pos->x = xPos;
     pos->y = yPos;
@@ -74,7 +74,7 @@ objPos objPos::getObjPos() const
     return returnPos;
 }
 
-wchar_t objPos::getSymbol() const
+char objPos::getSymbol() const
 {
     return symbol;
 }
@@ -84,7 +84,7 @@ bool objPos::isPosEqual(const objPos* refPos) const
     return (refPos->pos->x == pos->x && refPos->pos->y == pos->y);
 }
 
-wchar_t objPos::getSymbolIfPosEqual(const objPos* refPos) const
+char objPos::getSymbolIfPosEqual(const objPos* refPos) const
 {
     if(isPosEqual(refPos))
         return symbol;
