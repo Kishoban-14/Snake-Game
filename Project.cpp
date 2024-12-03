@@ -86,8 +86,8 @@ void Initialize(void)
     // Initialising Global Variables
     HEIGHT = gameMech->getBoardSizeX();                             // Get Board Height
     WIDTH = gameMech->getBoardSizeY();                             // Get Board Width
-    HEAD_SYMBOL = " O";                                           // Get Head Symbol
-    BODY_SYMBOL = "  o";                                         // Set Body Symbol
+    HEAD_SYMBOL = "🐍";                                           // Get Head Symbol
+    BODY_SYMBOL = " 🟩";                                         // Set Body Symbol
     OBJ_SIZE = playerPtr->getPlayerPos()->getSize();            // Get Player Size
 
     buffer += u8"===============================\n\t SNAKE GAME \n===============================\n\n";
