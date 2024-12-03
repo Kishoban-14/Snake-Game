@@ -5,36 +5,43 @@
 
 objPosArrayList::objPosArrayList()
 {
-
     listSize = 3;
-    aList = new objPos[ARRAY_MAX_CAP];
+    arrayCapacity = ARRAY_MAX_CAP;
+    aList = new objPos[arrayCapacity];
 
     for (int i = 0; i < listSize; i++)
     {
-        aList[i] = objPos();
+        aList[i].setObjPos(0, 0 + i, L'o');
     }
 }
 
 objPosArrayList::objPosArrayList(int size)
 {
     listSize = size;
-    aList = new objPos[ARRAY_MAX_CAP];
+    arrayCapacity = ARRAY_MAX_CAP;
+    aList = new objPos[arrayCapacity];
+
+    initialX = 2;
+    initialY = 2;
 
     for (int i = 0; i < listSize; i++)
     {
-        aList[i] = objPos();
+        aList[i].setObjPos(initialX, initialY + i, L'o');
     }
 }
 
-objPosArrayList::objPosArrayList(int x, int y, int size)
+objPosArrayList::objPosArrayList(const int x, const int y, int size)
 {
     listSize = size;
+    arrayCapacity = ARRAY_MAX_CAP;
+    aList = new objPos[arrayCapacity];
 
-    aList = new objPos[ARRAY_MAX_CAP];
+    initialX = x;
+    initialY = y;
 
     for (int i = 0; i < listSize; i++)
     {
-        aList[i] = objPos(x, y + i, ' ');
+        aList[i].setObjPos(initialX, initialY + i, L'o');
     }
 }
 
@@ -53,6 +60,13 @@ void objPosArrayList::insertHead(objPos thisPos)
     if (listSize >= arrayCapacity)
     {
         arrayCapacity = arrayCapacity * 2;
+        objPos* newList = new objPos[arrayCapacity];
+        for (int i = 0; i < listSize; i++)
+        {
+            newList[i] = aList[i];
+        }
+        delete[] aList;
+        aList = newList;
     }
 
     for (int i = listSize; i > 0; i--)
@@ -69,6 +83,13 @@ void objPosArrayList::insertTail(objPos thisPos)
     if (listSize >= arrayCapacity)
     {
         arrayCapacity = arrayCapacity * 2;
+        objPos* newList = new objPos[arrayCapacity];
+        for (int i = 0; i < listSize; i++)
+        {
+            newList[i] = aList[i];
+        }
+        delete[] aList;
+        aList = newList;
     }
     
     aList[listSize++] = thisPos;
@@ -104,3 +125,14 @@ objPos objPosArrayList::getElement(int index) const
     return aList[index];
 }
 
+void objPosArrayList:: removeElement(int index)
+{
+    if (index >= 0 && index < listSize)
+    {
+        for (int i = index; i < listSize - 1; i++)
+        {
+            aList[i] = aList[i + 1];
+        }
+        listSize--;
+    }
+}

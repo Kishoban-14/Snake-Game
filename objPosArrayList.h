@@ -12,10 +12,13 @@ class objPosArrayList
         int listSize;
         int arrayCapacity;
 
+        int initialX;
+        int initialY;
+
     public:
         objPosArrayList();
         objPosArrayList(int size);
-        objPosArrayList(int x, int y, int size);
+        objPosArrayList(const int x, const int y, int size);
 
         ~objPosArrayList();
 
@@ -24,6 +27,7 @@ class objPosArrayList
         void insertTail(objPos thisPos);
         void removeHead();
         void removeTail();
+        void removeElement(int index);
         
         objPos getHeadElement() const;
         objPos getTailElement() const;
