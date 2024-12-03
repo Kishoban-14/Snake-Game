@@ -160,6 +160,7 @@ void DrawScreen(void)
 
     buffer += u8"===============================\n\t SNAKE GAME \n===============================\n\n";
     objPosArrayList* foodBucket = foodPtr->getFoodBucket();
+    int k;
     for (i = 0; i < HEIGHT; i++)
     {
         for (j = 0; j < WIDTH; j++)
@@ -175,7 +176,7 @@ void DrawScreen(void)
             else
             {
                 bool foodDrawn = false;
-                for (int k = 0; k < foodBucket->getSize(); k++)
+                for (k = 0; k < foodBucket->getSize(); k++)
                 {
                     objPos food = foodBucket->getElement(k);
                     if (i == food.getX() && j == food.getY())
@@ -187,7 +188,7 @@ void DrawScreen(void)
                 }
                 if (!foodDrawn)
                 {
-                    for (int k = 0; k < OBJ_SIZE; k++)
+                    for (k = 0; k < OBJ_SIZE; k++)
                     {
                         if (i == playerPtr->getPlayerPos()->getElement(k).getX() && j == playerPtr->getPlayerPos()->getElement(k).getY())
                         {

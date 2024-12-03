@@ -10,6 +10,7 @@
 #include "Player.h"
 using namespace std;
 
+class Player;
 class GameMechs
 {
     private:

@@ -19,8 +19,6 @@ Food:: ~Food()
 void Food::generateFood(int boardSizeX, int boardSizeY, objPosArrayList* playerPos)
 {
     int specialFoods = specialFoodCount;
-    int xRange = boardSizeX;
-    int yRange = boardSizeY;
     for (int i = 0; i < 5; ++i)
     {
         bool valid = false;
@@ -29,8 +27,8 @@ void Food::generateFood(int boardSizeX, int boardSizeY, objPosArrayList* playerP
 
         while(!valid)
         {
-            x = rand() % (xRange - 2) + 1;
-            y = rand() % (yRange - 2) + 1;
+            x = rand() % (boardSizeX - 2) + 1;
+            y = rand() % (boardSizeY - 2) + 1;
             valid = true;
             for (int j = 0; j < playerSize; j++) 
             {
