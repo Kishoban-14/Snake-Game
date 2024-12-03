@@ -7,7 +7,7 @@
 #include "objPos.h"
 #include "objPosArrayList.h"
 
-
+class GameMechs;
 class Player
 {
     // Construct the remaining declaration from the project manual.
