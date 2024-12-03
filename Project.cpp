@@ -18,6 +18,7 @@ using namespace std;
 // Global Objects
 Player *playerPtr = nullptr;
 GameMechs *gameMech = nullptr;
+Food *foodPtr = nullptr;
 
 // Global Variables
 int DELAY_CONST = 100000;
@@ -82,6 +83,7 @@ void Initialize(void)
     // Allocating Heap Memory
     gameMech = new GameMechs(10, 20); // Game Mechanics Object
     playerPtr = new Player(gameMech, INIT_X, INIT_Y, INIT_SIZE);   // Player Object
+    foodPtr = new Food(5,2);
 
     // Initialising Global Variables
     HEIGHT = gameMech->getBoardSizeX();                             // Get Board Height
@@ -92,7 +94,7 @@ void Initialize(void)
 
     buffer += u8"===============================\n\t SNAKE GAME \n===============================\n\n";
 
-    gameMech->generateFood(playerPtr->getPlayerPos());              // Generate Food
+    foodPtr->generateFood(HEIGHT, WIDTH, playerPtr->getPlayerPos());              // Generate Food
     // Generate Missing Row
     for (i = 0; i < WIDTH; i++)    
         (i == 0 || i == WIDTH - 1) ? Missing_Row += BORDER_SYMBOL : Missing_Row += SPACE_CHAR;
@@ -141,7 +143,7 @@ void RunLogic(void)
         return ;
     }
 
-
+    gameMech->checkFoodConsumption(playerPtr);
 }
 
 void DrawScreen(void)
@@ -150,14 +152,14 @@ void DrawScreen(void)
     if (gameMech->getExitFlagStatus())
         return ;
 
-    int food_x = gameMech->getFoodPos().getX();
-    int food_y = gameMech->getFoodPos().getY();
+    int food_x = foodPtr->getFoodPos(0).getX();
+    int food_y = foodPtr->getFoodPos(0).getY();
     MacUILib_clearScreen();
 
     buffer.clear(); // Clear buffer at the start
 
     buffer += u8"===============================\n\t SNAKE GAME \n===============================\n\n";
-
+    objPosArrayList* foodBucket = foodPtr->getFoodBucket();
     for (i = 0; i < HEIGHT; i++)
     {
         for (j = 0; j < WIDTH; j++)
@@ -166,28 +168,41 @@ void DrawScreen(void)
             {
                 buffer += BORDER_SYMBOL;
             }
-            else if (i == food_x && j == food_y)
-            {
-                buffer += u8" 🥚";
-            }
+            // else if (i == food_x && j == food_y)
+            // {
+            //     buffer += u8" 🥚";
+            // }
             else
             {
-                int k;
-                for (k = 0; k < OBJ_SIZE; k++)
+                bool foodDrawn = false;
+                for (int k = 0; k < foodBucket->getSize(); k++)
                 {
-                    if (i == playerPtr->getPlayerPos()->getElement(k).getX() && j == playerPtr->getPlayerPos()->getElement(k).getY())
+                    objPos food = foodBucket->getElement(k);
+                    if (i == food.getX() && j == food.getY())
                     {
-                        if (k == 0)
+                        buffer += (food.getSymbol() == '@')? u8" 🥚" : u8" 🍒";
+                        foodDrawn = true;
+                        break; 
+                    }
+                }
+                if (!foodDrawn)
+                {
+                    for (int k = 0; k < OBJ_SIZE; k++)
+                    {
+                        if (i == playerPtr->getPlayerPos()->getElement(k).getX() && j == playerPtr->getPlayerPos()->getElement(k).getY())
                         {
-                            buffer += " ";
-                            // buffer += ;
-                            buffer += HEAD_SYMBOL;
+                            if (k == 0)
+                            {
+                                buffer += " ";
+                                // buffer += ;
+                                buffer += HEAD_SYMBOL;
+                            }
+                            else
+                            {
+                                buffer += BODY_SYMBOL;
+                            }
+                            break;
                         }
-                        else
-                        {
-                            buffer += BODY_SYMBOL;
-                        }
-                        break;
                     }
                 }
                 if (k == OBJ_SIZE)
@@ -221,6 +236,7 @@ void CleanUp(void)
     // De-allocate Heap Memory
     delete playerPtr;
     delete gameMech;
+    delete foodPtr;
 
     MacUILib_uninit();
 }
