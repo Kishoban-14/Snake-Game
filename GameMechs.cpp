@@ -90,8 +90,10 @@ void GameMechs::clearInput()
 
 // More methods should be added here
 void GameMechs::generateFood(objPosArrayList* playerPos)
-{
-    foodPtr->generateFood(playerPos);
+{   
+    int boardSizeX = getBoardSizeX();
+    int boardSizeY = getBoardSizeY();
+    foodPtr->generateFood(boardSizeX, boardSizeY, playerPos);
     // int xRange = getBoardSizeX();
     // int yRange = getBoardSizeY();
     // int x, y;
@@ -150,7 +152,7 @@ void GameMechs::checkFoodConsumption(Player* player)
                 incrementScore(5);
             }
             foodPtr->removeFood(i);
-            foodPtr->generateFood(player->getPlayerPos());
+            foodPtr->generateFood(boardSizeX, boardSizeY, player->getPlayerPos());
             break;
         }
     }
