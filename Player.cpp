@@ -14,20 +14,14 @@ Player::Player(GameMechs *thisGMRef, int initialX, int initialY, int initialSize
     mainGameMechsRef = thisGMRef;
     myDir = STOP;
 
-    int boardX = mainGameMechsRef->getBoardSizeX();
-    int boardY = mainGameMechsRef->getBoardSizeY();
-
-    if (initialX > boardX - 2 || initialX < 1)
-        initialX = boardX / 2;
-    
-    if (initialY > boardY || initialY < 1)
-        initialY = boardY / 2;
-    
-    if (initialSize > boardX - 1 || initialSize > boardY - 1 || initialSize < 1)
-        initialSize = 3;
     // Initialize playerPos
     playerPos = new objPosArrayList(initialX, initialY, initialSize);
 
+    // for (int i = 0; i < playerPos->getSize(); i++) // Initialize with one element
+    // {
+    //     objPos initialPos(initialX, initialY, 'O');
+    //     playerPos->getElement(i).setObjPos(initialPos);
+    // }
 }
 
 Player::~Player()
