@@ -6,11 +6,9 @@
 #include <conio.h>
 #include "objPos.h"
 #include "objPosArrayList.h"
-#include "Food.h"
-#include "Player.h"
+
 using namespace std;
 
-class Player;
 class GameMechs
 {
     private:
@@ -22,8 +20,7 @@ class GameMechs
         int boardSizeX;
         int boardSizeY;
 
-        // objPos* foodPos;
-        Food* foodPtr;
+        objPos* foodPos;
 
     public:
         GameMechs();
@@ -43,13 +40,11 @@ class GameMechs
         int getBoardSizeY() const;
         
         int getScore() const;
-        void incrementScore(int points);
+        void incrementScore();
         
         // More methods should be added here
         void generateFood(objPosArrayList* playerPos);
         objPos getFoodPos() const;
-        void removeFood(int index);
-        void checkFoodConsumption(Player* player);
 };
 
 #endif
